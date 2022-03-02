@@ -1,10 +1,10 @@
 #Change directory
-dir <-"Z:/users/songyeon/DrugTargetIdentification/DepMap(21Q4)/CCLE" ###°æ·Î¹Ù²Ù±â
+dir <-"Z:/users/songyeon/DrugTargetIdentification/DepMap(21Q4)/CCLE" ###ê²½ë¡œë°”ê¾¸ê¸°
 if(!is.dir(dir))
   dir.create(dir, recursive=TRUE)
 setwd(dir)
 
-######### ÆÄÀÏ ºÒ·¯¿À±â #########
+######### íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸° #########
 ex<-read.csv("CCLE_expression.csv")
 cn<-read.csv("CCLE_gene_cn.csv")
 mut<-read.csv("CCLE_mutations.csv")
@@ -13,18 +13,18 @@ info<-read.csv("sample_info_PrimarySite.csv")
 crispr<-read.csv("CRISPR_gene_effect.csv")
 dependency<-read.csv("CRISPR_gene_dependency.csv")
 
-######### ÆÄÀÏ ÀüÃ³¸® #########
+######### íŒŒì¼ ì „ì²˜ë¦¬ #########
 #Set key for merge()
 colnames(ex)[1]<-"DepMap_ID"
 colnames(cn)[1]<-"DepMap_ID"
 
-#Gene symbol ÃßÃâ
+#Gene symbol ì¶”ì¶œ
 names(ex)<-gsub(x=names(ex), pattern="\\..\\d+\\.", replacement="") 
 names(cn)<-gsub(x=names(cn), pattern="\\..\\d+\\.", replacement="") 
 names(crispr)<-gsub(x=names(crispr), pattern="\\..\\d+\\.", replacement="") 
 names(dependency)<-gsub(x=names(dependency), pattern="\\..\\d+\\.", replacement="") 
 
-#Gene ID ÃßÃâ
+#Gene ID ì¶”ì¶œ
 names(ex) <- sub('.*\\.(\\d+)\\.$', '\\1', names(ex))
 names(cn_protein_gene) <- sub('.*\\.(\\d+)\\.$', '\\1', names(cn_protein_gene))
 
@@ -35,7 +35,7 @@ mut<-merge(info, mut, key="DepMap_ID")
 crispr<-merge(info, crispr, key="DepMap_ID")
 dependency<-merge(info, dependency, key="DepMap_ID")
 
-######### ÆÄÀÏ ÀúÀå #########
+######### íŒŒì¼ ì €ìž¥ #########
 write.csv(ex, "CCLE_expression_ID_PrimarySite.csv", row.names=FALSE)
 write.csv(cn, "CCLE_gene_cn_Primary_20220126.csv", row.names=FALSE)
 write.csv(cn_protein_gene, "CCLE_gene_cn_ID_PrimarySite_ProteinCodingGenes.csv", row.names=FALSE)
@@ -43,7 +43,7 @@ write.csv(mut, "CCLE_mutations_PrimarySite.csv", row.names=FALSE)
 write.csv(crispr, "CRISPR_gene_effect_Primary_20220126.csv", row.names=FALSE)
 write.csv(dependency, "CRISPR_gene_dependency_Primary_20220126.csv", row.names=FALSE)
 
-######### Protein-coding gene¸¸ ÃßÃâÇÏ±â #########
+######### Protein-coding geneë§Œ ì¶”ì¶œí•˜ê¸° #########
 library(tidyverse)
 cn_pcg<-cn
 ex_pcg<-ex
@@ -53,7 +53,7 @@ pcg<-map_dfr(pcg_list, ~.[cols])
 cn_protein_gene<-pcg[1:1750,]
 write.csv(cn_protein_gene, "CCLE_gene_cn_Primary_ProteinCodingGenes.csv", row.names=FALSE)
 
-######### Mutation dataset Á¤¸®ÇÏ±â #########
+######### Mutation dataset ì •ë¦¬í•˜ê¸° #########
 library(reshape2)
 
 length(unique(mut$Entrez_Gene_Id))
@@ -67,7 +67,7 @@ mut_without_entrez0<-mut_without_entrez0[mut_without_entrez0$Variant_Classificat
 sum(is.na(mut_without_entrez0$Hugo_Symbol))
 
 mut_subset<-mut_without_entrez0[,c(1,2,4)]
-mut_subset_count_2<-dcast(mut_subset, DepMap_ID~Entrez_Gene_Id) #ÇÙ½É
+mut_subset_count_2<-dcast(mut_subset, DepMap_ID~Entrez_Gene_Id) #í•µì‹¬
 mut_subset_count_2<-merge(info, mut_subset_count_2, key="DepMap_ID")
 write.csv(mut_subset_count_2, "CCLE_mutations_ID_PrimarySite_Counting.csv", row.names=FALSE)
 
